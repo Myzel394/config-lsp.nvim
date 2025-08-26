@@ -11,24 +11,24 @@ local function setup_config_lsp(path, args)
     )
   end
 
+  local full_args = args or {}
+  table.insert(full_args, 1, path) -- Insert path as first argument
+
   -- LSP config
-  vim.lsp.config["config_lsp"] = {
+  vim.lsp.config("config_lsp", {
       cmd = {
         path,
-        unpack(args or {})
       },
       filetypes = {
-          "python",
+          "aliases",
+          "fstab",
+          "hosts",
           "sshconfig",
           "sshdconfig",
-          "fstab",
-          "aliases",
           "wireguard",
           "bitcoin_conf",
-          "conf"
       },
-      root_dir = vim.loop.cwd,
-  }
+  })
   vim.lsp.enable("config_lsp")
 end
 
@@ -36,7 +36,8 @@ local function add_filetypes()
   -- Add custom filetypes
   vim.filetype.add({
       pattern = {
-        ["*/wg%d.conf"] = "wireguard",
+        ["**/wg%d.conf"] = "wireguard",
+        ["**/.ssh/config"] = "sshconfig",
       },
       extension = {
           wg = "wireguard",
@@ -45,6 +46,10 @@ local function add_filetypes()
           sshconfig = "sshconfig",
           sshd_config = "sshdconfig",
           fstab = "fstab",
+          hosts = "hosts",
+          aliases = "aliases",
+          ["wg0.conf"] = "wireguard",
+          ["wg1.conf"] = "wireguard",
           ["bitcoin.conf"] = "bitcoin_conf",
           ["bit.conf"] = "bitcoin_conf",
           ["bitcoind.conf"] = "bitcoin_conf",

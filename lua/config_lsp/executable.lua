@@ -87,6 +87,24 @@ local function prepare_executable(opts)
     end
   end
 
+  -- Try download folder
+  if executable_path == nil then
+    local data_path = opts.executable.download_folder .. "/config-lsp"
+
+    if try_executable(data_path) then
+      executable_path = data_path
+    end
+  end
+
+  -- Try local data folder
+  if executable_path == nil then
+    local data_path = vim.fn.stdpath("data") .. "/config-lsp/bin/config-lsp"
+
+    if try_executable(data_path) then
+      executable_path = data_path
+    end
+  end
+
   if executable_path == nil then
     vim.notify(
       "[config-lsp] Could not find 'config-lsp' executable. I will download it now for you...",
