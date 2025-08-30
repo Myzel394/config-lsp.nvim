@@ -6,6 +6,11 @@ local constants = require("config_lsp.constants")
 ---@param path string
 ---@return boolean - Whether the executable at `path` is valid
 local function try_executable(path)
+  -- Check if file exists
+  if vim.fn.filereadable(path) == 0 then
+    return false
+  end
+
   -- Try running `path --version` to see if it's a valid executable
   local result = vim.api.nvim_command("silent !\"" .. path .. "\" --version")
   return result == nil
